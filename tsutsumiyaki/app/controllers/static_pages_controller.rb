@@ -1,8 +1,8 @@
 class StaticPagesController < ApplicationController
   def index
-    @list = Api::V1::News.fetchNews
-    p @list
-    return
+    # @list = Api::V1::News.fetchNews
+    # p @list
+    # return
 
     @news = Api::V1::Digest.fetchAllChannels
     # p @news

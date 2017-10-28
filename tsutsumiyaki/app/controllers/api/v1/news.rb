@@ -1,6 +1,8 @@
 # ChannelsController
 # require 'utils/error.rb'
 require 'net/https'
+require 'open-uri'
+require 'kconv'
 module Api
   module V1
     class News < ApiController
@@ -19,59 +21,48 @@ module Api
         # uri = URI.parse("#{request_url}")
 
         begin
-          response = Net::HTTP.start(uri.host, uri.port) do |http|
-            http.use_ssl = true
-            # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-            # http.open_timeout = 100
-            http.read_timeout = 100
-            http.get(uri.request_uri)
+          # sleep 1 if Time.now - @last_accessed < ACCESS_INTERVAL
+
+          # url = URI.parse(url) if url.is_a?(String)
+          html = open(uri) do |f|
+            @status_code = f.status[0].try(:to_i)
+            @current_url = f.base_uri.to_s
+            f.read
           end
+          @html = html.toutf8
+          p fetch @html
+        rescue OpenURI::HTTPError => e
+          p e.message.split(' ')
+        end
+        return
+      end
 
-          p "============-"
-          p response
+      def self.fetch(rss_body)
+        # Rails.logger.debug "accessing: #{url}"
+        # @client.access(url)
 
-          # http = Net::HTTP.new(uri.host, uri.port)
-          # # http.use_ssl = true
-          # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-          #
-          # req = Net::HTTP::Post.new(uri.path)
-          #
-          # p "=========="
-          # p req
-          # req.set_form_data({ 'title' => '早大３連覇　斎藤が１５奪三振、初完封　東京六大学野球',
-          #                     'body' => '東京六大学野球秋季リーグは３０日、神宮球場で最終週の早大—慶大３回戦があり、早大が斎藤（１年、早稲田実）の活躍で慶大に７—０で大勝し、３季連続４０度目の優勝を果たした。勝ち点４で明大と並んだが、勝率で上回った。早大は１１月１０日開幕の明治神宮大会への出場も決めた。斎藤はスライダーやツーシームなどの変化球がさえ、リーグ戦初完封。被安打４で１５奪三振の力投で今季４勝目を挙げた。打線は１回、松本（３年、千葉経大付）の適時打と本田（４年、智弁和歌山）の３点二塁打で４点を先取し、その後も加点した。慶大は３連投のエース加藤幹（４年、川和）が力尽きた。',
-          #                     'enc'  => 'utf-8', # 入出力文字コードがUTF-8
-          #                     'debug' => '1', # 0:false 1:true
-          #                     'permax' => '50' #要約圧縮率
-          #                   })
-          #
-          # response = http.request(req)
+        unless rss_body.xml =~ %r{<(channel|feed).*?>.*?</(channel|feed)>}mi
+          return RssEntity.new(url, error: "RSSリンクではありません")
+        end
 
-          # [レスポンス処理]
-          # 1xx系 => Net::HTTPInformation
-          # 2xx系 => Net::HTTPSuccess
-          # 3xx系 => Net::HTTPRedirection
-          # 4xx系 => Net::HTTPClientError
-          # 5xx系 => Net::HTTPServerError
-          case response
-            # 2xx系
-            when Net::HTTPSuccess
-              return response.body
-            # 3xx系
-            when Net::HTTPRedirection
-              p("Redirection: code=#{response.code} message=#{response.message}")
-            else
-              p("HTTP ERROR: code=#{response.code} message=#{response.message}")
+        if rss_body.success?
+          rss = RssEntity.new(url, {
+              final_url: rss_body.current_url,
+              body: rss_body.xml,
+              code: rss_body.status_code
+          })
+          if rss.success?
+            if rss.items.empty?
+              rss.error = "RSSの items 要素が空です"
+            elsif rss.items.none?{|i| URI::regexp(%w( http https )) =~ i.link }
+              rss.error = "RSSのLinkが不正です"
+            elsif rss.items.all?{|i| i.title.blank? }
+              rss.error = "RSSのTitleが不正です"
+            end
           end
-
-        rescue IOError => e
-          p(e.message)
-        rescue TimeoutError => e
-          p(e.message)
-        rescue JSON::ParserError => e
-          p(e.message)
-        rescue => e
-          p(e.message)
+          rss
+        else
+          RssEntity.new(url, error: "取得に失敗しました")
         end
       end
     end
