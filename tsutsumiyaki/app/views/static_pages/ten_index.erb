@@ -1,7 +1,7 @@
 <div class="content clearfix">
   <div class="btn-group col-md-8" role="group" aria-label="...">
-    <button type="button" class="btn btn-default col-md-4 active">注目のニュースを表示</button>
-    <button onclick="location.href='/ten_index'" type="button" class="btn btn-default col-md-4">最新の10件を表示</button>
+    <button onclick="location.href='/'" type="button" class="btn btn-default col-md-4">注目のニュースを表示</button>
+    <button type="button" class="btn btn-default col-md-4 active">最新の10件を表示</button>
     <!--<button type="button" class="btn btn-default col-md-2">Right</button>-->
   </div>
 
@@ -31,10 +31,10 @@
         handler.fitMapToBounds();
     });
 
-//    handler = Gmaps.build('Google');
-//    handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
-//        markers = handler.addMarkers(<%=raw @hash.to_json %>);
-//        handler.bounds.extendWith(markers);
-//        handler.fitMapToBounds();
-//    });
+    //    handler = Gmaps.build('Google');
+    //    handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+    //        markers = handler.addMarkers(<%=raw @hash.to_json %>);
+    //        handler.bounds.extendWith(markers);
+    //        handler.fitMapToBounds();
+    //    });
 </script>

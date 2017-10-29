@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   root 'static_pages#index'
   get 'get_articles', to: 'static_pages#get_articles'
+  get 'ten_index', to: 'static_pages#ten_index'
 
   namespace :api do
     namespace :v1 do

@@ -60,6 +60,18 @@ class StaticPagesController < ApplicationController
     end
   end
 
+  def ten_index
+    news_list = Article.all.order(id: "ASC").limit(10)
+    @hash = Gmaps4rails.build_markers(news_list) do |news, marker|
+      p "news----~"
+      p news
+      marker.lat news.latitude
+      marker.lng news.longitude
+      marker.infowindow "(#{news.place})#{news.title}\n#{news.description}"
+      marker.json({title: news.title})
+    end
+  end
+
   def get_articles
     news_list = Api::V1::News.fetchNews[0..10].map do |rss|
       digest = Api::V1::Digest.getDigest ({title: rss.title, body: rss.description, permax: '50' })
