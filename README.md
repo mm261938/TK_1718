@@ -76,19 +76,22 @@ NEWSMAPの特徴
 ## 開発内容・開発技術
 ### 活用した技術
 #### API・データ
-今回スポンサーから提供されたAPI、製品などの外部技術があれば記述をして下さい。
-
-* 
-* 
-* 
+* [文章要約API(sdon)](http://www.47news.jp/cgi-bin/ra/editor/editor.cgi)
+* [Google News 取得API](http://tomehachi.sakura.ne.jp/blog/archives/486)
+* [Google地図API](https://developers.google.com/maps/?hl=ja)
 
 #### フレームワーク・ライブラリ・モジュール
-* 
-* 
+* サーバ: Amazon Web Services
+  * Rack Webサーバー: Unicorn
+  * Webサーバー: Nginx
+  * フレームワーク: Rails
+* Ruby on Rails
+  * Ruby: v2.4.0
+  * Rails: v5.1.4
+* DB: MySQL2
 
 #### デバイス
-* 
-* 
+* Webアプリケーション
 
 ### 研究内容・事前開発プロダクト（任意）
 なし
