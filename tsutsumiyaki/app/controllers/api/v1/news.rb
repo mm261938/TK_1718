@@ -3,6 +3,7 @@
 require 'net/https'
 require 'open-uri'
 require 'kconv'
+require 'rss'
 module Api
   module V1
     class News < ApiController
@@ -15,7 +16,8 @@ module Api
               'ned' => 'us',
               'ie'  => 'utf-8',
               'output' => 'rss',
-              'topic' => 'w'
+              'topic' => 'w',
+              'num' => '100'
             })
         uri = URI.parse("#{request_url}?#{params}")
         # uri = URI.parse("#{request_url}")
@@ -25,12 +27,14 @@ module Api
 
           # url = URI.parse(url) if url.is_a?(String)
           html = open(uri) do |f|
-            @status_code = f.status[0].try(:to_i)
+            # @status_code = f.status[0].try(:to_i)
             @current_url = f.base_uri.to_s
             f.read
           end
           @html = html.toutf8
-          p fetch @html
+          @document = RSS::Parser.parse(@html, false)
+          # p fetch @html
+          return @document.items
         rescue OpenURI::HTTPError => e
           p e.message.split(' ')
         end
