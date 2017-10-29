@@ -9,12 +9,11 @@ default: &default
     encoding: utf8
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     username: root
-    password: root
-    socket: /Applications/MAMP/tmp/mysql/mysql.sock
 
 development:
   <<: *default
   database: world_n_map
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,6 +22,8 @@ test:
   <<: *default
   database: world_n_map_test
 
-production:
+production: 
   <<: *default
   database: world_n_map
+  username: root
+

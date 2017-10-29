@@ -1,0 +1,2 @@
+2017/10/29 03:44:39 [error] 19859#0: *4 open() "/usr/share/nginx/html/robots.txt" failed (2: No such file or directory), client: 203.178.135.47, server: localhost, request: "GET /robots.txt HTTP/1.1", host: "54.249.93.130"
+2017/10/29 03:44:40 [error] 19859#0: *2 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 203.178.135.47, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "54.249.93.130", referrer: "http://54.249.93.130/"
