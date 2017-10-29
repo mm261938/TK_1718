@@ -61,7 +61,7 @@ class StaticPagesController < ApplicationController
   end
 
   def get_articles
-    news_list = Api::V1::News.fetchNews[4..-1].map do |rss|
+    news_list = Api::V1::News.fetchNews[0..10].map do |rss|
       digest = Api::V1::Digest.getDigest ({title: rss.title, body: rss.description, permax: '50' })
       # geos = digest.match(/<CANDIDATE num="1>(.+?)<\/CANDIDATE>/)[1].split("\t")
       # p "digest----"

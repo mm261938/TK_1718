@@ -16,7 +16,7 @@ module Api
               'ned' => 'us',
               'ie'  => 'utf-8',
               'output' => 'rss',
-              'topic' => 'w',
+              'topic' => 'p',
               'num' => '100'
             })
         uri = URI.parse("#{request_url}?#{params}")
