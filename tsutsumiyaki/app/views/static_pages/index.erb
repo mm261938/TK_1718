@@ -1,6 +1,25 @@
-<h2>Hello</h2>
-<p><%= @news %></p>
-<div style='width: 800px;'>
+<div class="content clearfix">
+  <div class="btn-group col-md-8" role="group" aria-label="...">
+    <button type="button" class="btn btn-default col-md-4 active">注目のニュースを表示</button>
+    <button type="button" class="btn btn-default col-md-4">最新の10件を表示</button>
+    <!--<button type="button" class="btn btn-default col-md-2">Right</button>-->
+  </div>
+
+  <div class="dropdown col-md-4 float-right">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+      カテゴリ選択
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+      <li><a href="#World">国際</a></li>
+      <li><a href="#Society">社会</a></li>
+      <li><a href="#Politics">政治</a></li>
+      <li><a href="#Sports">スポーツ</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="content">
   <div id="map" style='width: 800px; height: 400px;'></div>
 </div>
 
